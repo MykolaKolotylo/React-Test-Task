@@ -1,17 +1,30 @@
 import './InnerCard.css';
-import React, {} from 'react'
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
+import DragIndicatorIcon from '@material-ui/icons/DragIndicator';
+import {Draggable} from "react-beautiful-dnd";
 
-import TextBlock from '../text-block/TextBlock';
+import Editor from '../editor/Editor';
+import {CardActions} from "@material-ui/core";
 
-const InnerCard = () => {
+const InnerCard = ({index}) => {
     return (
-        <Card className={'inner-card'}>
-            <CardContent>
-                <TextBlock/>
-            </CardContent>
-        </Card>
+        <Draggable draggableId={`${index}`} index={index}>
+            {(provided) => (
+                <Card className={'inner-card'}
+                      ref={provided.innerRef}
+                      {...provided.draggableProps}
+                      {...provided.dragHandleProps}
+                >
+                    <CardContent className={'inner-content'}>
+                        <Editor/>
+                        <CardActions className={'drag-icon'}>
+                            <DragIndicatorIcon/>
+                        </CardActions>
+                    </CardContent>
+                </Card>
+            )}
+        </Draggable>
     );
 }
 

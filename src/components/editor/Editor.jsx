@@ -1,13 +1,14 @@
+import './Editor.css';
 import React, {useMemo, useState} from 'react'
 import {createEditor} from 'slate'
 import {Slate, Editable, withReact} from 'slate-react'
 
-const TextBlock = () => {
+const Editor = () => {
     const editor = useMemo(() => withReact(createEditor()), []);
     const [value, setValue] = useState([
         {
             type: 'paragraph',
-            children: [{text: 'Editable aria'}],
+            children: [{text: ''}],
         },
     ]);
 
@@ -16,14 +17,12 @@ const TextBlock = () => {
             editor={editor}
             value={value}
             onChange={newValue => {
-                setValue(newValue);
-                const content = JSON.stringify(value)
-                localStorage.setItem('content', content)
+                setValue(newValue)
             }}
         >
-            <Editable/>
+            <Editable className={'editor'} placeholder="Enter some text..."/>
         </Slate>
     );
 }
 
-export default TextBlock;
+export default Editor;
