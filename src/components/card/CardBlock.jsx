@@ -10,31 +10,34 @@ import {getBlocks, reorder} from '../../common/utils';
 import InnerCard from "../inner-card/InnerCard";
 
 const CardBlock = () => {
-    const [blocks, setBlocks] = useState(getBlocks(1));
+    const [blocks, setBlocks] = useState([getBlocks(1)]);
 
     const onDragEnd = (result) => {
-        if (!result.destination) {
+        const {source, destination} = result;
+
+        if (!destination) {
             return;
         }
 
-        if (result.destination.index === result.source.index) {
+        const sInd = +source.droppableId;
+        const dInd = +destination.droppableId;
+
+        if (sInd !== dInd) {
             return;
         }
 
-        const reorderedBlocks = reorder(
-            blocks,
-            result.source.index,
-            result.destination.index
-        );
-        setBlocks(reorderedBlocks);
+        const items = reorder(blocks[sInd], source.index, destination.index);
+        const newState = [...blocks];
+        newState[sInd] = items;
+        setBlocks(newState);
     }
-
 
     return (
         <Card>
             <CardHeader
                 action={
-                    <IconButton aria-label="settings" onClick={() => setBlocks([...blocks, ...getBlocks(1)])}>
+                    <IconButton aria-label="settings"
+                                onClick={() => setBlocks([[...blocks[0], ...getBlocks(1)]])}>
                         <AddIcon/>
                     </IconButton>
                 }
@@ -42,14 +45,16 @@ const CardBlock = () => {
             />
             <CardContent>
                 <DragDropContext onDragEnd={onDragEnd}>
-                    <Droppable droppableId="list">
-                        {(provided) => (
-                            <div ref={provided.innerRef} {...provided.droppableProps}>
-                                {blocks.map((_, i) => <InnerCard key={i} index={i}/>)}
-                                {provided.placeholder}
-                            </div>
-                        )}
-                    </Droppable>
+                    {blocks.map((el, ind) => (
+                        <Droppable key={ind} droppableId={`${ind}`}>
+                            {(provided) => (
+                                <div ref={provided.innerRef} {...provided.droppableProps}>
+                                    {el.map((b, i) => <InnerCard key={b.id} id={b.id} index={i}/>)}
+                                    {provided.placeholder}
+                                </div>
+                            )}
+                        </Droppable>
+                    ))}
                 </DragDropContext>
             </CardContent>
         </Card>

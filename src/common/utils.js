@@ -1,6 +1,6 @@
 export const getBlocks = (count) =>
-    Array.from({length: count}, (v, k) => k).map(k => ({
-        id: `item-${k}`
+    Array.from({ length: count }, (v, k) => k).map(k => ({
+        id: `item-${k}-${new Date().getTime()}`,
     }));
 
 export const reorder = (list, startIndex, endIndex) => {

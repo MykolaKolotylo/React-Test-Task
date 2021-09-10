@@ -7,9 +7,9 @@ import {Draggable} from "react-beautiful-dnd";
 import Editor from '../editor/Editor';
 import {CardActions} from "@material-ui/core";
 
-const InnerCard = ({index}) => {
+const InnerCard = ({id, index}) => {
     return (
-        <Draggable draggableId={`${index}`} index={index}>
+        <Draggable draggableId={`${id}`} index={index}>
             {(provided) => (
                 <Card className={'inner-card'}
                       ref={provided.innerRef}
